@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Song> songList;
     private ListView songView;
 
-    Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 return a.getTitle().compareTo(b.getTitle());
             }
         });
-        SongAdapter songAdt = new SongAdapter(this, songList);
+        songAdapter songAdt = new songAdapter(this, songList);
         songView.setAdapter(songAdt);
 
     }

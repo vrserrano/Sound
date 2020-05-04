@@ -1,5 +1,7 @@
 package com.verocorp.soundsoulapp;
 
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import java.util.ArrayList;
 import android.content.Context;
@@ -13,10 +15,10 @@ public class songAdapter extends BaseAdapter {
     private ArrayList<Song> songs;
     private LayoutInflater songInf;
 
-    public SongAdapter(Context c, ArrayList<Song> theSongs){
+    public songAdapter(Context c, ArrayList<Song> theSongs) {
         songs=theSongs;
         songInf=LayoutInflater.from(c);
-    }
+    };
 
     @Override
         public int getCount() {
@@ -53,8 +55,8 @@ public class songAdapter extends BaseAdapter {
                 songLay.setTag(position);
                 return songLay;
             }
-            return null;
+
         }
 
-    }
+
 
