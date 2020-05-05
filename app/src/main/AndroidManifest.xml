@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name="com.verocorp.soundsoulapp.Song" />
+            android:name="com.verocorp.soundsoulapp.songService" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

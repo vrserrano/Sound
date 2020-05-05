@@ -22,14 +22,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.view.MenuItem;
 import android.view.View;
-import com.verocorp.soundsoulapp.SongsService.MusicBinder;
+import com.verocorp.soundsoulapp.songService.MusicBinder;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 0;
     private ArrayList<Song> songList;
     private ListView songView;
-    private SongsService songSrv;
+    private songService songSrv;
     private Intent playIntent;
     private boolean musicBound=false;
 
@@ -56,30 +56,39 @@ public class MainActivity extends AppCompatActivity {
 
             return;
         }
-        //connect to the service
-        ServiceConnection musicConnection = new ServiceConnection(){
-
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                SongsService.MusicBinder binder = (SongsService.MusicBinder)service;
-                //get service
-                songSrv = binder.getService();
-                //pass list
-                songSrv.setList(songList);
-                musicBound = true;
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                musicBound = false;
-            }
-        };
-
         songView = (ListView)findViewById(R.id.song_list);
         songList = new ArrayList<Song>();
         getSongList();
 
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(playIntent==null){
+            playIntent = new Intent(this, songService.class);
+            bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+            startService(playIntent);
+        }
+    }
+    //connect to the service
+    ServiceConnection musicConnection = new ServiceConnection(){
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            songService.MusicBinder binder = (songService.MusicBinder)service;
+            //get service
+            songSrv = binder.getService();
+            //pass list
+            songSrv.setList(songList);
+            musicBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            musicBound = false;
+        }
+    };
+
     public void getSongList() {
         //retrieve song info
         ContentResolver musicResolver = getContentResolver();
@@ -113,18 +122,6 @@ public class MainActivity extends AppCompatActivity {
         songView.setAdapter(songAdt);
 
     }
-        @Override
-        protected void onStart() {
-            super.onStart();
-
-                if(playIntent==null){
-                playIntent = new Intent(this, SongsService.class);
-                    ServiceConnection musicConnection = null;
-                    bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
-                startService(playIntent);
-        }
-    }
-
         public void songPicked(View view){
             songSrv.setSong(Integer.parseInt(view.getTag().toString()));
             songSrv.playSong();
