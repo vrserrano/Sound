@@ -9,7 +9,7 @@ public class SongController extends MediaController {
     }
 
     public SongController(MainActivity mainActivity) {
-        super();
+        super(mainActivity);
     }
 
     public void hide(){}
