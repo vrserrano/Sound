@@ -1,24 +1,79 @@
 package com.verocorp.soundsoulapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.os.Build;
 import android.widget.ListView;
 import android.os.Bundle;
 
+import android.os.IBinder;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.view.MenuItem;
+import android.view.View;
+import com.verocorp.soundsoulapp.SongsService.MusicBinder;
+
 public class MainActivity extends AppCompatActivity {
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 0;
     private ArrayList<Song> songList;
     private ListView songView;
+    private SongsService songSrv;
+    private Intent playIntent;
+    private boolean musicBound=false;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (shouldShowRequestPermissionRationale(
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                // Explain to the user why we need to read the contacts
+            }
+
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+
+            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+            // app-defined int constant that should be quite unique
+
+            return;
+        }
+        //connect to the service
+        ServiceConnection musicConnection = new ServiceConnection(){
+
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                SongsService.MusicBinder binder = (SongsService.MusicBinder)service;
+                //get service
+                songSrv = binder.getService();
+                //pass list
+                songSrv.setList(songList);
+                musicBound = true;
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                musicBound = false;
+            }
+        };
 
         songView = (ListView)findViewById(R.id.song_list);
         songList = new ArrayList<Song>();
@@ -57,5 +112,43 @@ public class MainActivity extends AppCompatActivity {
         songAdapter songAdt = new songAdapter(this, songList);
         songView.setAdapter(songAdt);
 
+    }
+        @Override
+        protected void onStart() {
+            super.onStart();
+
+                if(playIntent==null){
+                playIntent = new Intent(this, SongsService.class);
+                    ServiceConnection musicConnection = null;
+                    bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+                startService(playIntent);
+        }
+    }
+
+        public void songPicked(View view){
+            songSrv.setSong(Integer.parseInt(view.getTag().toString()));
+            songSrv.playSong();
+    }
+
+        @Override
+         public boolean onOptionsItemSelected(MenuItem item) {
+                //menu item selected
+            switch (item.getItemId()) {
+                case R.id.action_shuffle:
+                    //shuffle
+                    break;
+                case R.id.action_end:
+                    stopService(playIntent);
+                    songSrv=null;
+                    System.exit(0);
+                    break;
+            }
+            return super.onOptionsItemSelected(item);
+    }
+         @Override
+           protected void onDestroy() {
+                 stopService(playIntent);
+                 songSrv=null;
+                 super.onDestroy();
     }
 }
