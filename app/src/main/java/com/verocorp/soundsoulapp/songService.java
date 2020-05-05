@@ -3,6 +3,7 @@ package com.verocorp.soundsoulapp;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.IBinder;
 import java.util.ArrayList;
 import android.content.ContentUris;
@@ -16,6 +17,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 public class songService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
@@ -33,7 +35,6 @@ public class songService extends Service implements
 
 
     public void onCreate(){
-        //create the service
         //create the service
         super.onCreate();
         //initialize position
@@ -90,7 +91,7 @@ public class songService extends Service implements
         else shuffle=true;
     }
 
-    private String songTitle=&quot;&quot;;
+    private String songTitle=";";
     private static final int NOTIFY_ID=1;
 
 
@@ -120,7 +121,7 @@ public class songService extends Service implements
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if(player.getCurrentPosition()&gt;0){
+        if(player.getCurrentPosition()>0){
             mp.reset();
             playNext();
         }
@@ -132,6 +133,7 @@ public class songService extends Service implements
         return false;
     }
 
+     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
      @Override
      public void onPrepared(MediaPlayer mp) {
             //start playback
@@ -147,7 +149,7 @@ public class songService extends Service implements
                  .setSmallIcon(R.drawable.play)
                  .setTicker(songTitle)
                  .setOngoing(true)
-                 .setContentTitle(&quot;Playing&quot;)
+                 .setContentTitle("Playing")
                  .setContentText(songTitle);
          Notification not = builder.build();
 
@@ -190,7 +192,7 @@ public class songService extends Service implements
     //Función anterior
     public void playPrev(){
         songPosn--;
-        if(songPosn&lt;0) songPosn=songs.size()-1;
+        if(songPosn<0) songPosn=songs.size()-1;
         playSong();
     }
 
@@ -205,7 +207,7 @@ public class songService extends Service implements
         }
         else{
             songPosn++;
-            if(songPosn&gt;=songs.size()) songPosn=0;
+            if(songPosn>=songs.size()) songPosn=0;
         }
         playSong();
     }
