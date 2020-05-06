@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.content.ContentResolver;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
 
             return;
         }
-        songView = (ListView)findViewById(R.id.song_list);
+        songView = findViewById(R.id.song_list);
         songList = new ArrayList<Song>();
 
         getSongList();
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         //retrieve song info
         ContentResolver musicResolver = getContentResolver();
         Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
+        @SuppressLint("Recycle") Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
 
         if(musicCursor!=null && musicCursor.moveToFirst()){
             //get columns
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
                     (android.provider.MediaStore.Audio.Media._ID);
             int artistColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.ARTIST);
+
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);

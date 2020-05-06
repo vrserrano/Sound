@@ -1,19 +1,19 @@
 package com.verocorp.soundsoulapp;
 
-public class Song {
+class Song {
 
     private long id;
     private String title;
     private String artist;
 
-    public Song(long songID, String songTitle, String songArtist) {
+    Song(long songID, String songTitle, String songArtist) {
         id=songID;
         title=songTitle;
         artist=songArtist;
     }
 
-    public long getID(){return id;}
-    public String getTitle(){return title;}
-    public String getArtist(){return artist;}
+    long getID(){return id;}
+    String getTitle(){return title;}
+    String getArtist(){return artist;}
 
 }

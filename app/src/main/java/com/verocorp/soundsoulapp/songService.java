@@ -31,7 +31,7 @@ public class songService extends Service implements
     private final IBinder musicBind = new MusicBinder();
     private boolean shuffle=false;
     private Random rand;
-    private AudioManager requestAudioFocus;
+
 
 
     public void onCreate(){
@@ -87,7 +87,7 @@ public class songService extends Service implements
 
     //Reproducción aleatoria
     public void setShuffle(){
-        if(shuffle) shuffle=false;
+        if(shuffle)  shuffle=false;
         else shuffle=true;
     }
 
@@ -101,7 +101,7 @@ public class songService extends Service implements
     }
 
     //Tambien se accedera desde la clase activity
-    public class MusicBinder extends Binder {
+    class MusicBinder extends Binder {
         songService getService() {
             return songService.this;
         }

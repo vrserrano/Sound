@@ -1,5 +1,6 @@
 package com.verocorp.soundsoulapp;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,14 +16,14 @@ public class songAdapter extends BaseAdapter {
     private ArrayList<Song> songs;
     private LayoutInflater songInf;
 
-    public songAdapter(Context c, ArrayList<Song> theSongs) {
+    songAdapter(Context c, ArrayList<Song> theSongs) {
         songs=theSongs;
         songInf=LayoutInflater.from(c);
-    };
+    }
 
     @Override
         public int getCount() {
-            // TODO Auto-generated method stub
+        /* TODO Auto-generated method stub */
         return songs.size();
         }
 
@@ -34,18 +35,18 @@ public class songAdapter extends BaseAdapter {
 
         @Override
         public long getItemId(int arg0) {
-            // TODO Auto-generated method stub
+            /* TODO Auto-generated method stub */
             return 0;
         }
 
         @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 //map to song layout
-                LinearLayout songLay = (LinearLayout)songInf.inflate
+                @SuppressLint("ViewHolder") LinearLayout songLay = (LinearLayout)songInf.inflate
                         (R.layout.song, parent, false);
                 //get title and artist views
-                TextView songView = (TextView)songLay.findViewById(R.id.song_title);
-                TextView artistView = (TextView)songLay.findViewById(R.id.song_artist);
+                TextView songView = songLay.findViewById(R.id.song_title);
+                TextView artistView = songLay.findViewById(R.id.song_artist);
                 //get song using position
                 Song currSong = songs.get(position);
                 //get title and artist strings
