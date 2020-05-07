@@ -57,13 +57,13 @@ public class songService extends Service implements
     }
 
     public void playSong(){
-        //play a song
-        //get song
+        //reproduce la canción
+        //consigue la canción
         Song playSong = songs.get(songPosn);
         songTitle=playSong.getTitle();
-        //get id
+        //consigue la canción a través del ID
         long currSong = playSong.getID();
-        //set uri
+        //consigue la ruta donde se aloja la canción
         Uri trackUri = ContentUris.withAppendedId(
                 android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 currSong);
@@ -80,7 +80,7 @@ public class songService extends Service implements
     }
 
 
-    //Interaccion entre songService y activity
+    //Interacción entre songService y activity
     public void setList(ArrayList<Song> theSongs){
         songs=theSongs;
     }
@@ -100,9 +100,10 @@ public class songService extends Service implements
 
     }
 
-    //Tambien se accedera desde la clase activity
+    //También se accedera desde la clase activity
     class MusicBinder extends Binder {
         songService getService() {
+
             return songService.this;
         }
     }
@@ -136,7 +137,7 @@ public class songService extends Service implements
      @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
      @Override
      public void onPrepared(MediaPlayer mp) {
-            //start playback
+            //Inicio reproducción
             player.start();
          Intent notIntent = new Intent(this, MainActivity.class);
          notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

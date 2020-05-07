@@ -23,36 +23,33 @@ public class songAdapter extends BaseAdapter {
 
     @Override
         public int getCount() {
-        /* TODO Auto-generated method stub */
         return songs.size();
         }
 
         @Override
         public Object getItem(int arg0) {
-            // TODO Auto-generated method stub
             return null;
         }
 
         @Override
         public long getItemId(int arg0) {
-            /* TODO Auto-generated method stub */
             return 0;
         }
 
         @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                //map to song layout
+                //mapa donde estan las caciones
                 @SuppressLint("ViewHolder") LinearLayout songLay = (LinearLayout)songInf.inflate
                         (R.layout.song, parent, false);
-                //get title and artist views
+                //vista del titulo y artista de las canciones
                 TextView songView = songLay.findViewById(R.id.song_title);
                 TextView artistView = songLay.findViewById(R.id.song_artist);
-                //get song using position
+                //conseguimos las canciones por su posición
                 Song currSong = songs.get(position);
-                //get title and artist strings
+
                 songView.setText(currSong.getTitle());
                 artistView.setText(currSong.getArtist());
-                //set position as tag
+                //se estable la posición como etiqueta
                 songLay.setTag(position);
                 return songLay;
             }

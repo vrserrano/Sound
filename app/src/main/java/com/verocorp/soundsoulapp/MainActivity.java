@@ -48,17 +48,12 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
             if (shouldShowRequestPermissionRationale(
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                // Explain to the user why we need to read the contacts
-            }
+            } //Explica su uso y por qué necesitamos los contactos
 
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-
-            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
-            // app-defined int constant that should be quite unique
 
             return;
         }
@@ -78,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
             startService(playIntent);
         }
     }
-    //connect to the service
+    // conexión al servicio
     ServiceConnection musicConnection = new ServiceConnection(){
 
         @Override
@@ -98,13 +93,13 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
     };
 
     public void getSongList() {
-        //retrieve song info
+        //recupera información de la canción
         ContentResolver musicResolver = getContentResolver();
         Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         @SuppressLint("Recycle") Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
 
         if(musicCursor!=null && musicCursor.moveToFirst()){
-            //get columns
+            //columnas con información de la canción
             int titleColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.TITLE);
             int idColumn = musicCursor.getColumnIndex
@@ -112,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
             int artistColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.ARTIST);
 
-            //add songs to list
+            //con este condicional añade canciones a la lista
             do {
                 long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);
@@ -163,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
                  super.onDestroy();
     }
 
+    //acciones sobre las canciones
     @Override
     public void start() {
         songSrv.go();
@@ -224,31 +220,36 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
 
     @Override
     public int getBufferPercentage() {
+
         return 0;
     }
 
     @Override
     public boolean canPause() {
+
         return true;
     }
 
     @Override
     public boolean canSeekBackward() {
+
         return true;
     }
 
     @Override
     public boolean canSeekForward() {
+
         return true;
     }
 
     @Override
     public int getAudioSessionId() {
+
         return 0;
     }
 
     private void setController(){
-        //set the controller up
+        //controlador
         controller = new SongController(this);
         controller.setPrevNextListeners(new View.OnClickListener() {
             @Override
