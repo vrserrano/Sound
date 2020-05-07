@@ -48,14 +48,6 @@ public class songService extends Service implements
         player = new MediaPlayer();
         initMusicPlayer();
         rand=new Random();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            startMyOwnForeground();
-        else
-            startForeground(1, new Notification());
-
-
-
     }
 
     public void initMusicPlayer(){
@@ -167,8 +159,13 @@ public class songService extends Service implements
                  .setContentText(songTitle);
          Notification not = builder.build();
 
+         // Condicional para poder ejecutar la app en cualquier versión Android
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+             startMyOwnForeground();
+         else
          startForeground(NOTIFY_ID, not);
-        }
+         }
+
     @Override
     public void onDestroy() {
         stopForeground(true);
