@@ -38,18 +38,19 @@ public class songAdapter extends BaseAdapter {
 
         @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                //mapa donde estan las caciones
+            //map where the songs are
                 @SuppressLint("ViewHolder") LinearLayout songLay = (LinearLayout)songInf.inflate
                         (R.layout.song, parent, false);
                 //vista del titulo y artista de las canciones
                 TextView songView = songLay.findViewById(R.id.song_title);
                 TextView artistView = songLay.findViewById(R.id.song_artist);
-                //conseguimos las canciones por su posición
+
+            //we got the songs by their position
                 Song currSong = songs.get(position);
 
                 songView.setText(currSong.getTitle());
                 artistView.setText(currSong.getArtist());
-                //se estable la posición como etiqueta
+            //position is set as label
                 songLay.setTag(position);
                 return songLay;
             }
