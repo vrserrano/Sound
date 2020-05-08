@@ -9,7 +9,7 @@
     tools:context=".PrincipalActivity">
 
     <Button
-        android:id="@+id/reproductor"
+        android:id="@+id/player"
         android:layout_width="140dp"
         android:layout_height="53dp"
         android:layout_marginStart="144dp"
@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/favoritas"
+        android:id="@+id/favorite"
         android:layout_width="139dp"
         android:layout_height="60dp"
         android:layout_marginStart="115dp"
@@ -35,18 +35,18 @@
         android:layout_marginTop="60dp"
         android:layout_marginEnd="115dp"
         android:layout_marginRight="115dp"
-        android:background="#F19993"
+        android:background="#8BCC40"
         android:text="Favoritas"
         android:textAllCaps="true"
-        android:textColor="#F43325"
+        android:textColor="#204922"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/biblioteca" />
+        app:layout_constraintTop_toBottomOf="@+id/library" />
 
     <Button
-        android:id="@+id/biblioteca"
+        android:id="@+id/library"
         android:layout_width="144dp"
         android:layout_height="58dp"
         android:layout_marginStart="144dp"
@@ -54,10 +54,12 @@
         android:layout_marginTop="60dp"
         android:layout_marginEnd="144dp"
         android:layout_marginRight="144dp"
-        android:background="#F188AC"
+        android:background="#009688"
         android:text="Biblioteca"
-        android:textColor="#E91E63"
+        android:textAllCaps="true"
+        android:textColor="#153734"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reproductor" />
+        app:layout_constraintTop_toBottomOf="@+id/player" />
 </androidx.constraintlayout.widget.ConstraintLayout>

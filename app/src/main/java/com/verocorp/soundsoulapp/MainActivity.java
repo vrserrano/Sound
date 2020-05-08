@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
 
             if (shouldShowRequestPermissionRationale(
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            } //Explica su uso y por qué necesitamos los contactos
+            } //Explains its use and why we need contacts
 
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
             startService(playIntent);
         }
     }
-    // conexión al servicio
+    // connection to the service
     ServiceConnection musicConnection = new ServiceConnection(){
 
         @Override
@@ -93,13 +93,13 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
     };
 
     public void getSongList() {
-        //recupera información de la canción
+        //recovers information from the song
         ContentResolver musicResolver = getContentResolver();
         Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         @SuppressLint("Recycle") Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
 
         if(musicCursor!=null && musicCursor.moveToFirst()){
-            //columnas con información de la canción
+            //columns with song information
             int titleColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.TITLE);
             int idColumn = musicCursor.getColumnIndex
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
             int artistColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.ARTIST);
 
-            //con este condicional añade canciones a la lista
+            //This conditional adds songs to the list
             do {
                 long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
                  super.onDestroy();
     }
 
-    //acciones sobre las canciones
+    //actions on the songs
     @Override
     public void start() {
         songSrv.go();
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
     }
 
     private void setController(){
-        //controlador
+        //controller
         controller = new SongController(this);
         controller.setPrevNextListeners(new View.OnClickListener() {
             @Override
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         controller.setEnabled(true);
     }
 
-    //Siguiente canción
+    //Next song
     private void playNext(){
         songSrv.playNext();
         if(playbackPaused){
@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         controller.show(0);
     }
 
-    //Anterior canción
+    //Previous song
     private void playPrev(){
         songSrv.playPrev();
         if(playbackPaused){
@@ -286,6 +286,4 @@ public class MainActivity extends AppCompatActivity implements MediaPlayerContro
         }
         controller.show(0);
     }
-    //se crea el menu
-
 }

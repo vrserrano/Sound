@@ -62,13 +62,13 @@ public class songService extends Service implements
     }
 
     public void playSong(){
-        //reproduce la canción
-        //consigue la canción
+        //play the song
+        //get the song
         Song playSong = songs.get(songPosn);
         songTitle=playSong.getTitle();
-        //consigue la canción a través del ID
+        //get the song through the ID
         long currSong = playSong.getID();
-        //consigue la ruta donde se aloja la canción
+        //get the path where the song is hosted
         Uri trackUri = ContentUris.withAppendedId(
                 android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 currSong);
@@ -85,12 +85,12 @@ public class songService extends Service implements
     }
 
 
-    //Interacción entre songService y activity
+    //Interaction between songService and activity
     public void setList(ArrayList<Song> theSongs){
         songs=theSongs;
     }
 
-    //Reproducción aleatoria
+    //Random reproduction
     public void setShuffle(){
         if(shuffle)  shuffle=false;
         else shuffle=true;
@@ -105,7 +105,7 @@ public class songService extends Service implements
 
     }
 
-    //También se accedera desde la clase activity
+    //It will also be accessed from the activity class
     class MusicBinder extends Binder {
         songService getService() {
 
@@ -142,7 +142,7 @@ public class songService extends Service implements
      @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
      @Override
      public void onPrepared(MediaPlayer mp) {
-            //Inicio reproducción
+         //Start reproduction
             player.start();
          Intent notIntent = new Intent(this, MainActivity.class);
          notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -159,7 +159,7 @@ public class songService extends Service implements
                  .setContentText(songTitle);
          Notification not = builder.build();
 
-         // Condicional para poder ejecutar la app en cualquier versión Android
+         // Conditional to be able to run the app on any Android version
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
              startMyOwnForeground();
          else
@@ -175,7 +175,7 @@ public class songService extends Service implements
         songPosn=songIndex;
     }
 
-    //Funciones para controlar la reproducción
+    ///Functions to control reproduction
     public int getPosn(){
         return player.getCurrentPosition();
     }
@@ -200,14 +200,14 @@ public class songService extends Service implements
         player.start();
     }
 
-    //Función anterior
+    //Previous function
     public void playPrev(){
         songPosn--;
         if(songPosn<0) songPosn=songs.size()-1;
         playSong();
     }
 
-    //Siguiente canción
+    //Next song
     public void playNext(){
         if(shuffle){
             int newSong = songPosn;
