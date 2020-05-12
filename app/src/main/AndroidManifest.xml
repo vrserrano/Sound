@@ -25,8 +25,8 @@
             android:name=".PrincipalActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:screenOrientation="fullSensor"
-            tools:ignore="DuplicateActivity">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

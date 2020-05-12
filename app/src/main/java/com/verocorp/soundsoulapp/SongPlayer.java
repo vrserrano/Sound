@@ -3,8 +3,12 @@ package com.verocorp.soundsoulapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -23,6 +27,7 @@ public class SongPlayer extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_song);
 
@@ -91,4 +96,5 @@ public class SongPlayer extends AppCompatActivity {
     });
 
     }
+
 }
