@@ -3,6 +3,7 @@ package com.verocorp.soundsoulapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -59,6 +60,8 @@ public class SongPlayer extends AppCompatActivity {
                             "Añadir información", Toast.LENGTH_SHORT);
 
             information.show();
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         }
     });
 
