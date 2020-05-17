@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SoundSoulApp</string>
+    <string name="albumartwork">albumArtwork</string>
+    <string name="likebutton">likeButton</string>
+    <string name="librarybutton">libraryButton</string>
+    <string name="playburront">playBurront</string>
+    <string name="nextbutton">nextButton</string>
+    <string name="prevbutton">prevButton</string>
 </resources>

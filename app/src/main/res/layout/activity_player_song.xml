@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,9 +17,10 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="90dp"
         android:layout_marginRight="90dp"
+        android:contentDescription="@string/albumartwork"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/songTitle"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/music" />
 
     <ImageButton
@@ -27,58 +29,42 @@
         android:layout_height="56dp"
         android:layout_marginStart="100dp"
         android:layout_marginLeft="100dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
         android:background="#7DB9EA"
+        android:contentDescription="@string/likebutton"
         android:tint="#E1190A"
-        app:layout_constraintEnd_toStartOf="@+id/divider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cover"
         app:srcCompat="@drawable/ic_favorite_black_24dp" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="6dp"
-        android:layout_height="73dp"
-        android:layout_marginStart="42dp"
-        android:layout_marginLeft="42dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="42dp"
-        android:layout_marginRight="42dp"
-        android:background="#03A9F4"
-        app:layout_constraintEnd_toStartOf="@+id/information"
-        app:layout_constraintStart_toEndOf="@+id/like"
-        app:layout_constraintTop_toBottomOf="@+id/cover" />
-
     <ImageButton
-        android:id="@+id/information"
+        android:id="@+id/library"
         android:layout_width="67dp"
         android:layout_height="63dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="100dp"
         android:layout_marginRight="100dp"
         android:background="#7DB9EA"
+        android:contentDescription="@string/librarybutton"
         android:tint="#040B2E"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/divider"
         app:layout_constraintTop_toBottomOf="@+id/cover"
         app:srcCompat="@android:drawable/ic_menu_agenda" />
 
     <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="252dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginRight="45dp"
-        android:background="#7DB9EA"
+        android:id="@+id/audioSeekbar"
+        android:layout_width="230dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="67dp"
+        android:layout_marginLeft="67dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="67dp"
+        android:layout_marginRight="67dp"
+        android:background="@android:color/transparent"
+        android:clickable="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.076"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/like" />
 
     <ImageButton
         android:id="@+id/playButton"
@@ -86,15 +72,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:background="#7DB9EA"
+        android:contentDescription="@string/playburront"
         android:tint="#040717"
         app:layout_constraintEnd_toStartOf="@+id/nextButton"
         app:layout_constraintStart_toEndOf="@+id/previousButton"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"
-        app:srcCompat="@android:drawable/ic_media_play" />
+        app:layout_constraintTop_toBottomOf="@+id/songAlbum"
+        app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
 
     <ImageButton
         android:id="@+id/nextButton"
@@ -102,15 +89,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="100dp"
         android:layout_marginRight="100dp"
         android:background="#7DB9EA"
+        android:contentDescription="@string/nextbutton"
         android:tint="#040717"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/playButton"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"
-        app:srcCompat="@android:drawable/ic_media_next" />
+        app:layout_constraintTop_toBottomOf="@+id/songAlbum"
+        app:srcCompat="@drawable/ic_skip_next_black_24dp" />
 
     <ImageButton
         android:id="@+id/previousButton"
@@ -118,57 +106,65 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginLeft="100dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:background="#7DB9EA"
+        android:contentDescription="@string/prevbutton"
         android:tint="#040717"
         app:layout_constraintEnd_toStartOf="@+id/playButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar"
-        app:srcCompat="@android:drawable/ic_media_previous" />
+        app:layout_constraintTop_toBottomOf="@+id/songAlbum"
+        app:srcCompat="@drawable/ic_skip_previous_black_24dp" />
+
+    <TextView
+        android:id="@+id/currentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        app:layout_constraintEnd_toStartOf="@+id/audioSeekbar"
+        app:layout_constraintTop_toBottomOf="@+id/like" />
+
+    <TextView
+        android:id="@+id/totalTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/audioSeekbar"
+        app:layout_constraintTop_toBottomOf="@+id/like" />
 
     <TextView
         android:id="@+id/songTitle"
-        android:layout_width="141dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="133dp"
-        android:layout_marginLeft="133dp"
-        android:layout_marginTop="62dp"
-        android:layout_marginEnd="133dp"
-        android:layout_marginRight="133dp"
-        android:text="cancion"
-        android:textAllCaps="true"
-        android:textColor="#1C181A"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/audioSeekbar" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="38dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="469dp"
-        android:text="00:00"
-        app:layout_constraintEnd_toStartOf="@+id/seekBar"
+        android:id="@+id/songArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/songTitle" />
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="39dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="469dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginRight="45dp"
-        android:text="00:00"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/seekBar"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/songAlbum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/songArtist" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
