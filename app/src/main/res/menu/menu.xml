@@ -18,4 +18,9 @@ tools:context="com.sound.SongPlayer">
         android:title="Favoritas"
         app:showAsAction="never"/>
 
+    <item android:id="@+id/closeApp"
+        android:orderInCategory="104"
+        android:title="Cerrar aplicación"
+        app:showAsAction="never"/>
+
 </menu>
