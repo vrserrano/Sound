@@ -45,7 +45,7 @@ public class SongPlayer extends AppCompatActivity {
     TextView songTitle;
     TextView songArtist;
     TextView songAlbum;
-    Button closeActivity;
+
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 0;
 
     @Override
@@ -67,7 +67,7 @@ public class SongPlayer extends AppCompatActivity {
         songTitle = findViewById(R.id.songTitle);
         songArtist = findViewById(R.id.songArtist);
         songAlbum = findViewById(R.id.songAlbum);
-        closeActivity = findViewById(R.id.closeApp);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -83,6 +83,7 @@ public class SongPlayer extends AppCompatActivity {
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
             }
         });
@@ -182,16 +183,10 @@ public class SongPlayer extends AppCompatActivity {
     }
 
     private void closeActivity() {
-        closeActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-        });
+      this.finishActivity();
+    }
+
+    private void finishActivity() {
     }
 
     @Override
