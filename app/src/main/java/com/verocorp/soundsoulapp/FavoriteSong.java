@@ -1,27 +1,43 @@
 package com.verocorp.soundsoulapp;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class FavoriteSong extends AppCompatActivity {
+    boolean mBound = false;
+    SongService songService;
+    ListView favoritesSongView;
+    private DataBaseSoundSoulApp mDbHelper;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_song);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        favoritesSongView = findViewById(R.id.favorites_song_list);
+
+        mDbHelper = new DataBaseSoundSoulApp(this);
+        mDbHelper.open();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
@@ -37,9 +53,6 @@ public class FavoriteSong extends AppCompatActivity {
             case R.id.libraryActivity:
                 MainActivity();
                 return true;
-            case R.id.favoritesActivity:
-                FavoriteSong();
-                return true;
             case R.id.closeApp:
                 closeActivity();
                 return true;
@@ -54,23 +67,51 @@ public class FavoriteSong extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void FavoriteSong() {
-        Intent intent = new Intent(getApplicationContext(), FavoriteSong.class);
-        startActivity(intent);
-    }
-
     private void Player() {
         Intent intent = new Intent(getApplicationContext(), SongPlayer.class);
         startActivity(intent);
     }
 
     private void closeActivity() {
-      this.finishActivity();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            this.finishAffinity();
+        }
     }
 
-    private void finishActivity() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = new Intent(getApplicationContext(), SongService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(connection);
+        mDbHelper.close();
+    }
 
+    private final ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            SongService.SongServiceBinder binder = (SongService.SongServiceBinder) service;
+            songService = binder.getService();
+            mBound = true;
+            SongAdapter songAdt = new SongAdapter(FavoriteSong.this, mDbHelper.fetchAllSongs());
+            favoritesSongView.setAdapter(songAdt);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+    public void songPicked(View view) {
+        songService.setSong(view.getTag().toString());
+        songService.playSong();
+        finish();
+    }
 }
 

@@ -41,6 +41,7 @@ public class SongService extends Service implements
     private MediaPlayer audioPlayer;
     private Handler audioProgressUpdateHandler;
     final int UPDATE_AUDIO_PROGRESS_BAR = 1;
+    private String songPath;
     private int songPos = 0;
     private ArrayList<Song> songs;
     private final SongServiceBinder songServiceBinder = new SongServiceBinder();
@@ -126,8 +127,12 @@ public class SongService extends Service implements
         }
     }
 
-    void setSong(int songIndex) {
-        songPos = songIndex;
+    void setSong(String songPath) {
+        this.songPath = songPath;
+        for (int counter = 0; counter < songs.size(); counter++) {
+            if (songs.get(counter).getPath().equals(songPath))
+                songPos = counter;
+        }
     }
 
     Song getSong() {

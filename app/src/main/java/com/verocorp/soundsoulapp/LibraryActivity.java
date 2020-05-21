@@ -1,13 +1,11 @@
 package com.verocorp.soundsoulapp;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -23,7 +21,6 @@ public class LibraryActivity extends AppCompatActivity {
     SongService songService;
     ListView songView;
 
-
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +34,6 @@ public class LibraryActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
@@ -49,9 +45,6 @@ public class LibraryActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.songPlayerActivity:
                 Player();
-                return true;
-            case R.id.libraryActivity:
-                MainActivity();
                 return true;
             case R.id.favoritesActivity:
                 FavoriteSong();
@@ -65,11 +58,6 @@ public class LibraryActivity extends AppCompatActivity {
         }
     }
 
-    private void MainActivity() {
-        Intent intent = new Intent(getApplicationContext(), LibraryActivity.class);
-        startActivity(intent);
-    }
-
     private void FavoriteSong() {
         Intent intent = new Intent(getApplicationContext(), FavoriteSong.class);
         startActivity(intent);
@@ -81,10 +69,9 @@ public class LibraryActivity extends AppCompatActivity {
     }
 
     private void closeActivity() {
-        this.finishActivity();
-    }
-
-    private void finishActivity() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            this.finishAffinity();
+        }
     }
 
     @Override
@@ -117,7 +104,7 @@ public class LibraryActivity extends AppCompatActivity {
     };
 
     public void songPicked(View view) {
-        songService.setSong(Integer.parseInt(view.getTag().toString()));
+        songService.setSong(view.getTag().toString());
         songService.playSong();
         finish();
     }

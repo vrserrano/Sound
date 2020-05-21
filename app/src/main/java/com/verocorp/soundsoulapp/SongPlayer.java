@@ -26,11 +26,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SongPlayer extends AppCompatActivity {
     boolean mBound = false;
+    private DataBaseSoundSoulApp mDbHelper;
     SongService songService;
     Handler audioProgressUpdateHandler = null;
     SeekBar backgroundAudioProgress;
@@ -45,6 +47,7 @@ public class SongPlayer extends AppCompatActivity {
     TextView songTitle;
     TextView songArtist;
     TextView songAlbum;
+    Song currentSong;
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 0;
 
@@ -68,6 +71,8 @@ public class SongPlayer extends AppCompatActivity {
         songArtist = findViewById(R.id.songArtist);
         songAlbum = findViewById(R.id.songAlbum);
 
+        mDbHelper = new DataBaseSoundSoulApp(this);
+        mDbHelper.open();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -83,8 +88,13 @@ public class SongPlayer extends AppCompatActivity {
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                if (currentSong != null) {
+                    if (mDbHelper.addFavoriteSong(songService.getSong())) {
+                        Toast.makeText(getApplicationContext(),"Añadida a favoritas", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(),"Ya es una canción favorita", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 
@@ -139,7 +149,6 @@ public class SongPlayer extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
@@ -183,11 +192,11 @@ public class SongPlayer extends AppCompatActivity {
     }
 
     private void closeActivity() {
-      this.finishActivity();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            this.finishAffinity();
+        }
     }
 
-    private void finishActivity() {
-    }
 
     @Override
     protected void onResume() {
@@ -198,14 +207,14 @@ public class SongPlayer extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Log.d("LOGGGG", "onDestroy");
         unbindService(connection);
+        mDbHelper.close();
         mBound = false;
         super.onDestroy();
     }
 
     void setSongInfo() {
-        Song currentSong = songService.getSong();
+        currentSong = songService.getSong();
         songTitle.setText(currentSong.getTitle());
         songTitle.setTypeface(null, Typeface.BOLD);
         songArtist.setText(currentSong.getArtist());

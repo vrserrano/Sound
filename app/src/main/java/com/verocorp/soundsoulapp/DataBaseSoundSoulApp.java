@@ -8,26 +8,29 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class DataBaseSoundSoulApp {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-    public static final String KEY_TITLE = "title";
-    public static final String KEY_BODY = "body";
-    public static final String KEY_ROWID = "_id";
+class DataBaseSoundSoulApp {
+    private static final String KEY_ROWID = "_id";
+    private static final String KEY_SONG_ID = "songID";
+    private static final String KEY_SONG_TITLE = "songTitle";
+    private static final String KEY_SONG_ARTIST = "songArtist";
+    private static final String KEY_SONG_ALBUM = "songAlbum";
+    private static final String KEY_SONG_PATH = "songPath";
 
     private static final String TAG = "DataBaseSoundSoulApp";
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
 
-    /**
-     * Database creation sql statement
-     */
     private static final String DATABASE_CREATE =
-            "create table notes (_id integer primary key autoincrement, "
-                    + "title text not null, body text not null);";
+            "create table songs (_id integer primary key autoincrement, "
+                    + "songID INTEGER not null, songTitle text not null, songArtist text not null, songAlbum text not null, songPath text not null);";
 
-    private static final String DATABASE_NAME = "Lists";
-    private static final String DATABASE_TABLE = "Songs";
-    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "favorites";
+    private static final String DATABASE_TABLE = "songs";
+    private static final int DATABASE_VERSION = 1;
 
     private final Context mCtx;
 
@@ -39,7 +42,6 @@ public class DataBaseSoundSoulApp {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-
             db.execSQL(DATABASE_CREATE);
         }
 
@@ -52,97 +54,69 @@ public class DataBaseSoundSoulApp {
         }
     }
 
-    public DataBaseSoundSoulApp(Context mCtx) {
+    DataBaseSoundSoulApp(Context mCtx) {
         this.mCtx = mCtx;
     }
 
-        public DataBaseSoundSoulApp open () throws SQLException {
-            mDbHelper = new DatabaseHelper(mCtx);
-            mDb = mDbHelper.getWritableDatabase();
-            return this;
+    void open() throws SQLException {
+        mDbHelper = new DatabaseHelper(mCtx);
+        mDb = mDbHelper.getWritableDatabase();
+    }
+
+    void close() {
+        mDbHelper.close();
+    }
+
+    boolean addFavoriteSong(Song favoriteSong) {
+        Cursor musicCursor = mDb.query(DATABASE_TABLE, new String[]{KEY_ROWID, KEY_SONG_ID, KEY_SONG_TITLE, KEY_SONG_ARTIST, KEY_SONG_ALBUM, KEY_SONG_PATH}, null, null, null, null, null);
+        if (musicCursor != null && musicCursor.moveToFirst()) {
+            do {
+                long thisId = musicCursor.getLong(1);
+                if (thisId == favoriteSong.getID()) {
+                    return false;
+                }
+            }
+            while (musicCursor.moveToNext());
+
+            musicCursor.close();
         }
 
-        public void close () {
-            mDbHelper.close();
-        }
-
-
-    /**
-     * Create a new note using the title and body provided. If the note is
-     * successfully created return the new rowId for that note, otherwise return
-     * a -1 to indicate failure.
-     *
-     * @param title the title of the song
-     * @param body the body of the song
-     * @return rowId or -1 if failed
-     */
-    public long addSong(String title, String body) {
         ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_TITLE, title);
-        initialValues.put(KEY_BODY, body);
+        initialValues.put(KEY_SONG_ID, favoriteSong.getID());
+        initialValues.put(KEY_SONG_TITLE, favoriteSong.getTitle());
+        initialValues.put(KEY_SONG_ARTIST, favoriteSong.getArtist());
+        initialValues.put(KEY_SONG_ALBUM, favoriteSong.getAlbum());
+        initialValues.put(KEY_SONG_PATH, favoriteSong.getPath());
 
-        return mDb.insert(DATABASE_TABLE, null, initialValues);
+        mDb.insert(DATABASE_TABLE, null, initialValues);
+        return true;
     }
 
-    /**
-     * Delete the note with the given rowId
-     *
-     * @param rowId id of note to delete
-     * @return true if deleted, false otherwise
-     */
-    public boolean deleteSong(long rowId) {
+    ArrayList<Song> fetchAllSongs() {
+        ArrayList<Song> songList = new ArrayList<>();
 
-        return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
-    }
+        Cursor musicCursor = mDb.query(DATABASE_TABLE, new String[]{KEY_ROWID, KEY_SONG_ID, KEY_SONG_TITLE, KEY_SONG_ARTIST, KEY_SONG_ALBUM, KEY_SONG_PATH}, null, null, null, null, null);
+        if (musicCursor != null && musicCursor.moveToFirst()) {
+            do {
+                long thisId = musicCursor.getLong(1);
+                String thisTitle = musicCursor.getString(2);
+                String thisArtist = musicCursor.getString(3);
+                String thisAlbum = musicCursor.getString(4);
+                String thisPath = musicCursor.getString(5);
+                songList.add(new Song(thisId, thisTitle, thisArtist, thisAlbum, thisPath));
+            }
+            while (musicCursor.moveToNext());
 
-    /**
-     * Return a Cursor over the list of all notes in the database
-     *
-     * @return Cursor over all notes
-     */
-    public Cursor fetchAllNotes() {
-
-        return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_TITLE,
-                KEY_BODY}, null, null, null, null, null);
-    }
-
-    /**
-     * Return a Cursor positioned at the note that matches the given rowId
-     *
-     * @param rowId id of note to retrieve
-     * @return Cursor positioned to matching note, if found
-     * @throws SQLException if note could not be found/retrieved
-     */
-    public Cursor fetchNote(long rowId) throws SQLException {
-
-        Cursor mCursor =
-
-                mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID,
-                                KEY_TITLE, KEY_BODY}, KEY_ROWID + "=" + rowId, null,
-                        null, null, null, null);
-        if (mCursor != null) {
-            mCursor.moveToFirst();
+            musicCursor.close();
         }
-        return mCursor;
 
-    }
+        Collections.sort(songList, new Comparator<Song>() {
+            public int compare(Song a, Song b) {
+                return a.getTitle().compareTo(b.getTitle());
+            }
+        });
 
-    /**
-     * Update the note using the details provided. The note to be updated is
-     * specified using the rowId, and it is altered to use the title and body
-     * values passed in
-     *
-     * @param rowId id of song to update
-     * @param title value to set song title to
-     * @param body value to set song body to
-     * @return true if the note was successfully updated, false otherwise
-     */
-    public boolean updateSong(long rowId, String title, String body) {
-        ContentValues args = new ContentValues();
-        args.put(KEY_TITLE, title);
-        args.put(KEY_BODY, body);
-
-        return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+        return songList;
     }
 }
 
