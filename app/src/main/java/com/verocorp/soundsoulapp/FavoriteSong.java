@@ -9,9 +9,11 @@ import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -22,6 +24,8 @@ public class FavoriteSong extends AppCompatActivity {
     SongService songService;
     ListView favoritesSongView;
     private DataBaseSoundSoulApp mDbHelper;
+    private static final int DELETE_ID = Menu.FIRST + 1;
+
 
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -35,6 +39,8 @@ public class FavoriteSong extends AppCompatActivity {
         mDbHelper = new DataBaseSoundSoulApp(this);
         mDbHelper.open();
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,6 +83,24 @@ public class FavoriteSong extends AppCompatActivity {
             this.finishAffinity();
         }
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, DELETE_ID, 0, R.string.menu_delete);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getItemId() == DELETE_ID) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            mDbHelper.deleteSong(info.id);
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
 
     @Override
     protected void onResume() {

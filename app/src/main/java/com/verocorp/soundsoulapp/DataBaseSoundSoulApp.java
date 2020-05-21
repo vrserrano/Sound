@@ -92,6 +92,11 @@ class DataBaseSoundSoulApp {
         return true;
     }
 
+    public boolean deleteSong(long rowId) {
+
+        return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+    }
+
     ArrayList<Song> fetchAllSongs() {
         ArrayList<Song> songList = new ArrayList<>();
 
