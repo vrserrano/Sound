@@ -16,12 +16,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import androidx.appcompat.app.AppCompatActivity;
+
 
 public class FavoriteSong extends AppCompatActivity {
     boolean mBound = false;
     SongService songService;
+    SongAdapter songAdt;
     ListView favoritesSongView;
     private DataBaseSoundSoulApp mDbHelper;
     private static final int DELETE_ID = Menu.FIRST + 1;
@@ -33,14 +34,13 @@ public class FavoriteSong extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_song);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         favoritesSongView = findViewById(R.id.favorites_song_list);
-
         mDbHelper = new DataBaseSoundSoulApp(this);
         mDbHelper.open();
+        songAdt = new SongAdapter(FavoriteSong.this, mDbHelper.fetchAllSongs());
+        favoritesSongView.setAdapter(songAdt);
+        registerForContextMenu(favoritesSongView);
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -51,7 +51,6 @@ public class FavoriteSong extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         item.getItemId();
-
         switch (item.getItemId()) {
             case R.id.songPlayerActivity:
                 Player();
@@ -62,7 +61,6 @@ public class FavoriteSong extends AppCompatActivity {
             case R.id.closeApp:
                 closeActivity();
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -77,7 +75,6 @@ public class FavoriteSong extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), SongPlayer.class);
         startActivity(intent);
     }
-
     private void closeActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             this.finishAffinity();
@@ -94,13 +91,13 @@ public class FavoriteSong extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == DELETE_ID) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            mDbHelper.deleteSong(info.id);
+            mDbHelper.deleteSong(info.targetView.getTag().toString());
+            finish();
+            startActivity(getIntent());
             return true;
         }
         return super.onContextItemSelected(item);
     }
-
-
 
     @Override
     protected void onResume() {
@@ -122,10 +119,7 @@ public class FavoriteSong extends AppCompatActivity {
             SongService.SongServiceBinder binder = (SongService.SongServiceBinder) service;
             songService = binder.getService();
             mBound = true;
-            SongAdapter songAdt = new SongAdapter(FavoriteSong.this, mDbHelper.fetchAllSongs());
-            favoritesSongView.setAdapter(songAdt);
         }
-
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
             mBound = false;
@@ -138,4 +132,3 @@ public class FavoriteSong extends AppCompatActivity {
         finish();
     }
 }
-

@@ -6,5 +6,5 @@
     <string name="playburront">playBurront</string>
     <string name="nextbutton">nextButton</string>
     <string name="prevbutton">prevButton</string>
-    <string name="menu_delete" />
+    <string name="menu_delete">Eliminar canción</string>
 </resources>
