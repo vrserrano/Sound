@@ -92,11 +92,10 @@ class DataBaseSoundSoulApp {
         return true;
     }
 
-    public boolean deleteSong(String songPath) {
-
-        return mDb.delete(DATABASE_TABLE, KEY_SONG_PATH+ "=" + songPath, null) > 0;
+    void deleteSong(String songPath) {
+        mDb.delete(DATABASE_TABLE, KEY_SONG_PATH + "='" + songPath+"'", null);
     }
-
+    
     ArrayList<Song> fetchAllSongs() {
         ArrayList<Song> songList = new ArrayList<>();
 
