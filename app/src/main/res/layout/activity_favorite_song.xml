@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#C63C32"
+    android:background="#7DB9EA"
     android:orientation="vertical"
     tools:context=".LibraryActivity">
 
@@ -12,5 +12,5 @@
         android:id="@+id/favorites_song_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#AFD188" />
+        android:background="#056ABA" />
 </LinearLayout>
